@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Customer Report</title>
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .report-box {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    input[type="file"] {
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 20px;
+      background-color: green;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkgreen;
+    }
+    .success {
+      text-align: center;
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="report-box">
+    <h2>Report an Issue</h2>
+    <form id="reportForm">
+      <label for="name">Your Name:</label>
+      <input type="text" id="name" required>
+
+      <label for="email">Your Email:</label>
+      <input type="email" id="email" required>
+
+      <label for="product">Product Name:</label>
+      <input type="text" id="product" required>
+
+      <label for="description">Issue Description:</label>
+      <textarea id="description" rows="4" required></textarea>
+
+      <label for="image">Attach Image:</label>
+      <input type="file" id="image" accept="image/*" required>
+
+      <button type="submit">Submit Report</button>
+    </form>
+
+    <div class="success" id="successMessage" style="display:none;">
+      Report submitted successfully!
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("reportForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const product = document.getElementById("product").value;
+      const description = document.getElementById("description").value;
+      const imageInput = document.getElementById("image");
+
+      if (imageInput.files.length === 0) {
+        alert("Please attach an image.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        const imageBase64 = reader.result;
+
+        const reportData = {
+          name,
+          email,
+          product,
+          description,
+          image: imageBase64,
+          submittedAt: new Date().toLocaleString()
+        };
+
+        // Store in localStorage (you can push into an array for multiple reports)
+        let reports = JSON.parse(localStorage.getItem("customerReports")) || [];
+        reports.push(reportData);
+        localStorage.setItem("customerReports", JSON.stringify(reports));
+
+        document.getElementById("reportForm").reset();
+        document.getElementById("successMessage").style.display = "block";
+      };
+
+      reader.readAsDataURL(imageInput.files[0]);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Switch Account</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .switch-box {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .message {
+      margin-top: 15px;
+      color: green;
+    }
+
+    @media (max-width: 500px) {
+      .switch-box {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="switch-box">
+    <h2>Switch Account</h2>
+    <select id="accountSelect">
+      <option value="" disabled selected>Select an account</option>
+    </select>
+    <button onclick="switchAccount()">Switch</button>
+    <div class="message" id="messageBox"></div>
+  </div>
+
+  <script>
+    // Load accounts from localStorage
+    const accountSelect = document.getElementById("accountSelect");
+    const storedAccounts = JSON.parse(localStorage.getItem("accounts")) || [];
+
+    storedAccounts.forEach(account => {
+      const option = document.createElement("option");
+      option.value = account;
+      option.textContent = account;
+      accountSelect.appendChild(option);
+    });
+
+    function switchAccount() {
+      const selectedAccount = accountSelect.value;
+      const messageBox = document.getElementById("messageBox");
+
+      if (selectedAccount) {
+        localStorage.setItem("activeAccount", selectedAccount);
+        messageBox.innerText = "Switched to: " + selectedAccount;
+
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 1000);
+      } else {
+        messageBox.innerText = "Please select an account.";
+        messageBox.style.color = "red";
+      }
+    }
+  </script>
+
+</body>
+</html>

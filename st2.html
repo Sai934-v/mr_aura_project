@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mr_Aura Shirt ₹999</title>
+  <style>
+    body {
+      background-color: rgb(207, 207, 200);
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
+    .full {
+      background-color: whitesmoke;
+      margin: 3% 5%;
+      padding: 20px;
+      font-size: 22px;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .ft1 {
+      background-color: white;
+      margin: 20px 0;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .ft1 img {
+      width: 350px;
+      max-width: 100%;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .ft1 p {
+      font-size: 20px;
+      max-width: 700px;
+      text-align: justify;
+    }
+
+    .tx {
+      margin-top: 30px;
+    }
+
+    .size-option {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 15px;
+      border: 2px solid #444;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .size-option.selected {
+      background-color: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      list-style: none;
+      margin-right: 10px;
+    }
+
+    li a {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: rgb(153, 153, 178);
+      color: black;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    li a:hover {
+      background-color: rgb(122, 122, 155);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .ft1 {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .tx {
+        text-align: center;
+      }
+
+      .size-option {
+        font-size: 16px;
+        padding: 8px 10px;
+      }
+
+      .ft1 p {
+        font-size: 18px;
+        margin: 0;
+        padding: 10px;
+      }
+
+      li {
+        float: none;
+        margin: 5px auto;
+        width: 80%;
+        text-align: center;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .full {
+        max-width: 1200px;
+        margin: 2% auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="full">
+    <div class="ft1">
+      <img src="s2.jpeg" alt="Mr Aura Shirt" />
+      <p>
+        1. Casual Elegance Redefined – Step into effortless style with our slim-fit, full-sleeve shirt—perfect for casual Fridays or classy evening hangouts. Pair it with black trousers and leather shoes for a timeless look!<br><br>
+        2. Smart Style, All-Day Comfort – Our premium cotton shirt offers a flattering fit, rolled-up sleeves, and modern vibes. Be the trendsetter wherever you go!<br><br>
+        3. From Desk to Dinner – This versatile shirt transitions seamlessly from professional meetings to after-hours fun.<br><br>
+        4. Minimalist Look. Maximum Impact. – This sleek beige-toned shirt with button detailing and subtle texture makes a bold statement in a refined way.<br><br>
+        5. Style That Speaks for You – Crafted for the modern man—this shirt combines classic tailoring with a trendy silhouette. Just add shades and confidence!
+      </p>
+    </div>
+
+    <div class="tx">
+      Mr_Aura<br />
+      <strong>Shirt</strong><br />
+      ₹999/-<br />
+      Shop today & save big<br />
+
+      <h2>Select Size</h2>
+      <div class="size-container">
+        <div class="size-option" onclick="selectSize(this)">S</div>
+        <div class="size-option" onclick="selectSize(this)">M</div>
+        <div class="size-option" onclick="selectSize(this)">L</div>
+        <div class="size-option" onclick="selectSize(this)">XL</div>
+        <div class="size-option" onclick="selectSize(this)">XXL</div>
+      </div>
+
+      <ul>
+        <li>
+          <a href="cart.html" onclick="return addToCart(this, 'Mr_Aura Shirt', 999, 's2.jpeg', 'Made from cotton or cotton-blend fabric...')">Add to Cart</a>
+        </li>
+        <li>
+          <a href="buy.html" onclick="return buyDirectly(this, 'Mr_Aura Shirt', 999, 's2.jpeg', 'Made from cotton or cotton-blend fabric...')">Buy</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const editIndex = urlParams.get("index");
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    window.onload = function () {
+      if (editIndex !== null && cart[editIndex]) {
+        const sizeToSelect = cart[editIndex].size;
+        const sizeOptions = document.querySelectorAll('.size-option');
+        sizeOptions.forEach(opt => {
+          if (opt.textContent.trim() === sizeToSelect) {
+            opt.classList.add('selected');
+          }
+        });
+      }
+    };
+
+    function selectSize(element) {
+      const options = element.parentElement.querySelectorAll(".size-option");
+      options.forEach(opt => opt.classList.remove("selected"));
+      element.classList.add("selected");
+    }
+
+    function getSelectedSize(anchor) {
+      const container = anchor.closest(".tx").querySelector(".size-container");
+      const selected = container.querySelector(".size-option.selected");
+      return selected ? selected.textContent.trim() : null;
+    }
+
+    function addToCart(anchor, name, price, image, description) {
+      const size = getSelectedSize(anchor);
+      if (!size) {
+        alert("Please select a size before adding to cart.");
+        return false;
+      }
+
+      const item = {
+        name,
+        price,
+        size,
+        image,
+        description,
+        page: window.location.pathname.split("/").pop()
+      };
+
+      if (editIndex !== null && cart[editIndex]) {
+        cart[editIndex] = item;
+      } else {
+        cart.push(item);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Item added to cart!");
+      return true;
+    }
+
+    function buyDirectly(anchor, name, price, image, description) {
+      const size = getSelectedSize(anchor);
+      if (!size) {
+        alert("Please select a size before buying.");
+        return false;
+      }
+
+      const item = {
+        name,
+        price,
+        size,
+        image,
+        description
+      };
+
+      localStorage.setItem("buyNowProduct", JSON.stringify(item));
+      return true;
+    }
+  </script>
+</body>
+</html>

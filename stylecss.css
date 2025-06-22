@@ -1,0 +1,58 @@
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(207, 207, 200);
+}
+
+.wrapper {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+}
+
+.container {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 25px;
+    width: 300px;
+    margin-bottom: 30px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+input, button {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Start hidden and off-screen */
+#profile.hidden {
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.6s ease;
+}
+
+/* Slide-up animation */
+#profile.slide-up {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.6s ease;
+}

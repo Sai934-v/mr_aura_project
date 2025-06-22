@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Buy Product | MR_AURA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      padding: 0;
+      margin: 0;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      max-width: 600px;
+      margin: 20px auto;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      margin-bottom: 15px;
+      border-radius: 10px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      display: block;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      border-radius: 10px;
+      z-index: 999;
+      text-align: center;
+    }
+
+    .popup h2 {
+      color: green;
+      margin: 0;
+    }
+
+    h3 {
+      margin-top: 25px;
+      font-size: 20px;
+      color: #333;
+    }
+
+    /* Radio Button Custom Style */
+    .radio-group {
+      display: flex;
+      gap: 15px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .radio-card {
+      position: relative;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: border-color 0.3s, background-color 0.3s;
+      font-size: 15px;
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .radio-card input[type="radio"] {
+      display: none;
+    }
+
+    .radio-card.selected {
+      border-color: #8000ff;
+      background-color: #f4edff;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .box {
+        padding: 15px;
+        margin: 10px;
+      }
+
+      input,
+      button {
+        font-size: 15px;
+      }
+
+      .radio-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div id="product-details"></div>
+
+    <h3>Delivery Information</h3>
+
+    <div class="radio-group" id="address-choice" style="display: none;">
+      <label class="radio-card">
+        <input type="radio" name="addr" value="saved" checked>
+        Use Saved Address
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="addr" value="new">
+        Enter New Address
+      </label>
+    </div>
+
+    <div id="address-fields">
+      <input type="text" id="name" placeholder="Your Name" />
+      <input type="text" id="phone" placeholder="Phone Number" />
+      <input type="text" id="address" placeholder="Address" />
+      <input type="text" id="colony" placeholder="Colony" />
+      <input type="text" id="street" placeholder="Street" />
+      <input type="text" id="hno" placeholder="House No." />
+    </div>
+
+    <button onclick="placeOrder()">Place Order</button>
+  </div>
+
+  <div class="popup" id="popup">
+    <h2>Your order has been placed!</h2>
+  </div>
+
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartIndex = localStorage.getItem("buyIndex");
+    const product = JSON.parse(localStorage.getItem("buyNowProduct"));
+    let selectedProduct = product || (cartIndex !== null && cart[cartIndex]);
+    const detailsDiv = document.getElementById("product-details");
+
+    if (selectedProduct) {
+      detailsDiv.innerHTML = `
+        <img src="${selectedProduct.image}" alt="${selectedProduct.name}">
+        <h2>Product Details</h2>
+        <p><strong>Name:</strong> ${selectedProduct.name}</p>
+        <p><strong>Price:</strong> ₹${selectedProduct.price}</p>
+        <p><strong>Size:</strong> ${selectedProduct.size}</p>
+        <p><strong>Description:</strong> ${selectedProduct.description}</p>
+      `;
+    } else {
+      detailsDiv.innerHTML = "<p style='color:red;'>No product found!</p>";
+    }
+
+    const savedAddress = JSON.parse(localStorage.getItem("savedAddress"));
+    const addressFields = document.getElementById("address-fields");
+    const addressChoice = document.getElementById("address-choice");
+
+    if (savedAddress) {
+      addressChoice.style.display = "flex";
+      document.querySelectorAll('input[name="addr"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+          addressFields.style.display = (radio.value === 'new') ? 'block' : 'none';
+          updateSelectedRadio();
+        });
+      });
+    } else {
+      addressFields.style.display = "block";
+    }
+
+    function updateSelectedRadio() {
+      document.querySelectorAll('.radio-card').forEach(label => {
+        label.classList.remove('selected');
+        if (label.querySelector('input').checked) {
+          label.classList.add('selected');
+        }
+      });
+    }
+
+    updateSelectedRadio();
+
+    function placeOrder() {
+      let customer = null;
+
+      if (savedAddress && document.querySelector('input[name="addr"]:checked')?.value === "saved") {
+        customer = savedAddress;
+      } else {
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const address = document.getElementById("address").value.trim();
+        const colony = document.getElementById("colony").value.trim();
+        const street = document.getElementById("street").value.trim();
+        const hno = document.getElementById("hno").value.trim();
+
+        if (!name || !phone || !address || !colony || !street || !hno) {
+          alert("Please fill in all fields.");
+          return;
+        }
+
+        customer = { name, phone, address, colony, street, hno };
+        localStorage.setItem("savedAddress", JSON.stringify(customer));
+      }
+
+      const orderData = { ...selectedProduct, customer };
+      let allOrders = JSON.parse(localStorage.getItem("allOrders")) || [];
+      allOrders.push(orderData);
+      localStorage.setItem("allOrders", JSON.stringify(allOrders));
+      localStorage.setItem("lastOrder", JSON.stringify(orderData));
+
+      if (cartIndex !== null && cart[cartIndex]) {
+        cart.splice(cartIndex, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        localStorage.removeItem("buyIndex");
+      }
+
+      localStorage.removeItem("buyNowProduct");
+
+      document.getElementById("popup").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("popup").style.display = "none";
+        window.location.href = "myorder.html";
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

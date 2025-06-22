@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MR_AURA | Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 15px 30px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #8000ff;
+    }
+
+    .user-info {
+      font-size: 14px;
+      color: #555;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 16px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #8000ff;
+      color: white;
+    }
+
+    .banner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 10px;
+    }
+
+    .banner img {
+      width: 45%;
+      border-radius: 10px;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .categories {
+      background: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .categories ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .categories li a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #444;
+      padding: 10px 15px;
+      background: #f0f0f0;
+      border-radius: 6px;
+      transition: 0.2s;
+    }
+
+    .categories li a:hover {
+      background: #8000ff;
+      color: #fff;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .product-grid img {
+      width: 200px;
+      border-radius: 10px;
+      background-color: white;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .about, .contact {
+      background: white;
+      padding: 30px;
+      margin: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .about h3, .contact h3 {
+      color: #8000ff;
+      margin-bottom: 10px;
+    }
+
+    .contact h4 {
+      margin: 5px 0;
+    }
+
+    .welcome-message {
+      background-color: #e0d4ff;
+      color: #4b0082;
+      text-align: center;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .top-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .banner img {
+        width: 90%;
+      }
+
+      .product-grid img {
+        width: 40%;
+      }
+
+      .logo {
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔐 Redirect if not logged in -->
+  <script>
+    const activeUser = localStorage.getItem("activeAccount");
+    if (!activeUser) {
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <!-- ✅ Welcome Message (only for new users) -->
+  <div id="welcome" class="welcome-message" style="display:none;">
+    🎉 Welcome to MR_AURA! Your account has been created successfully.
+  </div>
+
+  <!-- ✅ Header -->
+  <header>
+    <div class="top-row">
+      <div class="logo">MR_AURA</div>
+      <div class="user-info" id="userDisplay"></div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="myorder.html">My Orders</a></li>
+        <li><a href="cus.html">Customer Service</a></li>
+        <li><a href="rep.html">Report</a></li>
+        <li><a href="swt.html">Switch Account</a></li>
+        <li><a href="log.html">Log Out</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 👤 Show user info -->
+  <script>
+    document.getElementById("userDisplay").innerText = "Logged in as: " + activeUser;
+
+    const isNewUser = localStorage.getItem("isNewUser");
+    if (isNewUser === "true") {
+      const welcomeBox = document.getElementById("welcome");
+      welcomeBox.style.display = "block";
+
+      setTimeout(() => {
+        welcomeBox.style.display = "none";
+        localStorage.removeItem("isNewUser");
+      }, 5000); // Hide after 5 seconds
+    }
+  </script>
+
+  <!-- 📸 Banner -->
+  <div class="banner">
+    <img src="front.jpg" alt="Main Banner">
+    <img src="front1.jpg" alt="Alternate Banner">
+  </div>
+
+  <!-- 🧥 Categories -->
+  <section class="categories">
+    <h2>Shop by Category</h2>
+    <ul>
+      <li><a href="Shirt.html">Shirts</a></li>
+      <li><a href="tshirt.html">T-Shirts</a></li>
+      <li><a href="jeans.html">Jeans</a></li>
+      <li><a href="tro.html">Trousers</a></li>
+      <li><a href="chin.html">Chinos</a></li>
+      <li><a href="car.html">Cargo</a></li>
+      <li><a href="hoddi.html">Hoodies</a></li>
+      <li><a href="shoes.html">Shoes</a></li>
+    </ul>
+  </section>
+
+  <!-- 🛍 Product Showcase -->
+  <div class="product-grid">
+    <img src="s1.jpeg" alt="Product 1">
+    <img src="s2.jpeg" alt="Product 2">
+    <img src="h4.jpeg" alt="Product 3">
+    <img src="s4.jpeg" alt="Product 4">
+    <img src="s5.jpeg" alt="Product 5">
+    <img src="s7.jpeg" alt="Product 6">
+  </div>
+
+  <!-- 📖 About -->
+  <section class="about">
+    <h3>About Us</h3>
+    <p>
+      At MR_AURA, we believe fashion is more than clothing—it's self-expression. 
+      Our collections combine modern edge with timeless elegance, helping you stand out. 
+      From comfortable everyday wear to statement pieces, each product is crafted with care, quality, and confidence in mind.
+    </p>
+  </section>
+
+  <!-- 📞 Contact -->
+  <section class="contact">
+    <h3>Contact</h3>
+    <h4>📧 bibinagarsaivishwanth@gmail.com</h4>
+    <h4>📞 973588363</h4>
+  </section>
+
+</body>
+</html>

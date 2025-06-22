@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Orders | MR_AURA</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e9ecff, #ffffff);
+      margin: 0;
+      padding: 40px 15px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .orders-container {
+      max-width: 1000px;
+      margin: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .order-card {
+      background-color: white;
+      width: 100%;
+      max-width: 450px;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease;
+    }
+
+    .order-card:hover {
+      transform: scale(1.01);
+    }
+
+    .order-image {
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      margin: 10px 0 5px;
+      color: #444;
+    }
+
+    p {
+      margin: 6px 0;
+      font-size: 14.5px;
+    }
+
+    .delivery-message {
+      background-color: #e7f9e7;
+      border-left: 4px solid #28a745;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      font-weight: 500;
+      color: #2c662d;
+    }
+
+    .cancel-btn {
+      margin-top: 15px;
+      background-color: #dc3545;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    .cancel-btn:hover {
+      background-color: #c82333;
+    }
+
+    .no-orders {
+      text-align: center;
+      font-size: 18px;
+      color: red;
+      font-weight: bold;
+      margin-top: 40px;
+    }
+
+    .buy-more-container {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .buy-more-btn {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .buy-more-btn:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      .order-card {
+        width: 90%;
+      }
+
+      .buy-more-btn {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛒 My Orders</h1>
+  <div class="orders-container" id="ordersContainer"></div>
+
+  <div class="buy-more-container">
+    <button class="buy-more-btn" onclick="window.location.href='home.html'">🛍️ Buy More</button>
+  </div>
+
+  <script>
+    let orders = JSON.parse(localStorage.getItem("allOrders")) || [];
+    const container = document.getElementById("ordersContainer");
+
+    function renderOrders() {
+      container.innerHTML = "";
+
+      if (orders.length === 0) {
+        container.innerHTML = "<div class='no-orders'>🚫 No orders found.</div>";
+        return;
+      }
+
+      orders.forEach((order, index) => {
+        const card = document.createElement("div");
+        card.className = "order-card";
+        card.innerHTML = `
+          <img src="${order.image}" class="order-image" alt="${order.name}">
+          <h3>🧥 ${order.name}</h3>
+          <p><strong>Price:</strong> ₹${order.price}</p>
+          <p><strong>Size:</strong> ${order.size}</p>
+          <p><strong>Description:</strong> ${order.description}</p>
+
+          <h3>📦 Delivery</h3>
+          <p><strong>Name:</strong> ${order.customer.name}</p>
+          <p><strong>Phone:</strong> ${order.customer.phone}</p>
+          <p><strong>Address:</strong> ${order.customer.address}, ${order.customer.colony}, ${order.customer.street}, H.No: ${order.customer.hno}</p>
+
+          <div class="delivery-message">✅ Will be delivered in 2–4 working days.</div>
+
+          <button class="cancel-btn" onclick="cancelOrder(${index})">Cancel Order</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function cancelOrder(index) {
+      if (confirm("Are you sure you want to cancel this order?")) {
+        orders.splice(index, 1);
+        localStorage.setItem("allOrders", JSON.stringify(orders));
+        renderOrders();
+      }
+    }
+
+    renderOrders();
+  </script>
+
+</body>
+</html>

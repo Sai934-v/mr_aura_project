@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mr_Aura Shoes ₹7999</title>
+  <style>
+    body {
+      background-color: rgb(207, 207, 200);
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .full {
+      background-color: whitesmoke;
+      margin: 3% 5%;
+      padding: 20px;
+      font-size: 22px;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .ft1 {
+      background-color: white;
+      margin-bottom: 30px;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    img {
+      width: 350px;
+      max-width: 100%;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    p {
+      text-align: justify;
+      margin-left: 3%;
+      font-size: 20px;
+      max-width: 600px;
+    }
+
+    .tx {
+      margin-left: 3%;
+      font-size: 20px;
+    }
+
+    .size-option {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 15px;
+      border: 2px solid #444;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .selected {
+      background-color: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    li a {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: rgb(153, 153, 178);
+      color: black;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    li a:hover {
+      background-color: rgb(122, 122, 155);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .ft1 {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tx {
+        margin-left: 0;
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      p {
+        margin-left: 0;
+        padding-top: 20px;
+        font-size: 18px;
+      }
+
+      ul {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      li {
+        width: 80%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="full">
+    <div class="ft1">
+      <img src="f7.jpeg" alt="Mr Aura Shoes">
+      <p>
+        1. Stylish Design – Trendy and casual, ideal for any outing.<br><br>
+        2. Breathable Material – Keeps your feet cool and fresh.<br><br>
+        3. Lace-Up Closure – Adjustable for a secure and comfy fit.<br><br>
+        4. Durable Sole – Great grip for various surfaces.<br><br>
+        5. ₹7999 – Premium quality for high-end style.
+      </p>
+    </div>
+
+    <div class="tx">
+      Mr_Aura<br>
+      <b>Shoes</b><br>
+      ₹7999/-<br>
+      Shop Today & Save Big<br>
+
+      <h2>Select Size</h2>
+      <div id="size-container">
+        <div class="size-option" onclick="selectSize(this)">6</div>
+        <div class="size-option" onclick="selectSize(this)">7</div>
+        <div class="size-option" onclick="selectSize(this)">8</div>
+        <div class="size-option" onclick="selectSize(this)">9</div>
+        <div class="size-option" onclick="selectSize(this)">10</div>
+      </div>
+
+      <ul>
+        <li><a href="#" onclick="return handleAddToCart(event)">Add to Cart</a></li>
+        <li><a href="#" onclick="return handleBuyNow(event)">Buy Now</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const editIndex = urlParams.get("index");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    window.onload = function () {
+      if (editIndex !== null && cart[editIndex]) {
+        const sizeToSelect = cart[editIndex].size;
+        document.querySelectorAll('.size-option').forEach(opt => {
+          if (opt.textContent.trim() === sizeToSelect) {
+            opt.classList.add('selected');
+          }
+        });
+      }
+    };
+
+    function selectSize(element) {
+      document.querySelectorAll('.size-option').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+
+    function handleAddToCart(event) {
+      event.preventDefault();
+      const selectedSize = document.querySelector('.size-option.selected');
+      if (!selectedSize) {
+        alert("Please select a size before adding to cart.");
+        return false;
+      }
+
+      const item = {
+        name: 'Mr_Aura Shoes',
+        price: 7999,
+        image: 'f7.jpeg',
+        description: 'Made for comfort',
+        size: selectedSize.textContent.trim(),
+        page: window.location.pathname.split("/").pop()
+      };
+
+      if (editIndex !== null && cart[editIndex]) {
+        cart[editIndex] = item;
+      } else {
+        cart.push(item);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Item successfully added to cart!");
+      window.location.href = "cart.html";
+    }
+
+    function handleBuyNow(event) {
+      event.preventDefault();
+      const selectedSize = document.querySelector('.size-option.selected');
+      if (!selectedSize) {
+        alert("Please select a size before buying.");
+        return false;
+      }
+
+      const item = {
+        name: 'Mr_Aura Shoes',
+        price: 7999,
+        image: 'f7.jpeg',
+        description: 'Made for comfort',
+        size: selectedSize.textContent.trim()
+      };
+
+      localStorage.setItem("buyNowProduct", JSON.stringify(item));
+      window.location.href = 'buy.html';
+      return true;
+    }
+  </script>
+
+</body>
+</html>

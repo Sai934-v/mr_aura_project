@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mr_Aura Jeans ₹599</title>
+  <style>
+    body {
+      background-color: rgb(207, 207, 200);
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .full {
+      background-color: whitesmoke;
+      margin: 3% 5%;
+      padding: 20px;
+      font-size: 22px;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .ft1 {
+      background-color: white;
+      margin-bottom: 30px;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    img {
+      width: 350px;
+      max-width: 100%;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    p {
+      text-align: justify;
+      margin-left: 3%;
+      font-size: 20px;
+      max-width: 600px;
+    }
+
+    .tx {
+      margin-left: 3%;
+      font-size: 20px;
+    }
+
+    .size-option {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 15px;
+      border: 2px solid #444;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .selected {
+      background-color: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    li {
+      list-style: none;
+    }
+
+    li a {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: rgb(153, 153, 178);
+      color: black;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    li a:hover {
+      background-color: rgb(122, 122, 155);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .ft1 {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tx {
+        margin-left: 0;
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      p {
+        margin-left: 0;
+        padding-top: 20px;
+        font-size: 18px;
+      }
+
+      ul {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      li {
+        width: 80%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="full">
+    <div class="ft1">
+      <img src="j7.jpeg" alt="Mr Aura Jeans">
+      <p>
+        1. Casual Elegance Redefined – Step into effortless style with our slim-fit, full-sleeve shirt—perfect for casual Fridays or classy evening hangouts.<br><br>
+        2. Smart Style, All-Day Comfort – Premium cotton shirt offers a flattering fit, rolled-up sleeves, and modern vibes.<br><br>
+        3. From Desk to Dinner – Look sharp at work and stylish at dinner—seamlessly transitions from meetings to after-hours fun.<br><br>
+        4. Minimalist Look, Maximum Impact – This sleek beige-toned shirt with subtle texture makes a refined statement.<br><br>
+        5. Style That Speaks – Classic tailoring with a trendy silhouette—just add shades and confidence!
+      </p>
+    </div>
+
+    <div class="tx">
+      Mr_Aura<br>
+      <b>Jeans</b><br>
+      ₹599/-<br>
+      Shop Today & Save Big<br>
+
+      <h2>Select Size</h2>
+      <div id="size-container">
+        <div class="size-option" onclick="selectSize(this)">22</div>
+        <div class="size-option" onclick="selectSize(this)">24</div>
+        <div class="size-option" onclick="selectSize(this)">26</div>
+        <div class="size-option" onclick="selectSize(this)">28</div>
+        <div class="size-option" onclick="selectSize(this)">30</div>
+      </div>
+
+      <ul>
+        <li><a href="#" onclick="return handleAddToCart(event)">Add Cart</a></li>
+        <li><a href="#" onclick="return handleBuyNow(event)">Buy</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const editIndex = urlParams.get("index");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    window.onload = function () {
+      if (editIndex !== null && cart[editIndex]) {
+        const sizeToSelect = cart[editIndex].size;
+        const sizeOptions = document.querySelectorAll('.size-option');
+        sizeOptions.forEach(opt => {
+          if (opt.textContent.trim() === sizeToSelect) {
+            opt.classList.add('selected');
+          }
+        });
+      }
+    };
+
+    function selectSize(element) {
+      const sizes = document.querySelectorAll('.size-option');
+      sizes.forEach(size => size.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+
+    function handleAddToCart(event) {
+      event.preventDefault();
+      const selectedSize = document.querySelector('.size-option.selected');
+      if (!selectedSize) {
+        alert("Please select a size before adding to cart.");
+        return false;
+      }
+
+      const item = {
+        name: 'Mr_Aura Jeans',
+        price: 599,
+        image: 'j7.jpeg',
+        description: 'Made for comfort',
+        size: selectedSize.textContent.trim(),
+        page: window.location.pathname.split("/").pop()
+      };
+
+      if (editIndex !== null && cart[editIndex]) {
+        cart[editIndex] = item;
+      } else {
+        cart.push(item);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Item added to cart!");
+      window.location.href = "cart.html";
+    }
+
+    function handleBuyNow(event) {
+      event.preventDefault();
+      const selectedSize = document.querySelector('.size-option.selected');
+      if (!selectedSize) {
+        alert("Please select a size before buying.");
+        return false;
+      }
+
+      const item = {
+        name: 'Mr_Aura Jeans',
+        price: 599,
+        image: 'j7.jpeg',
+        description: 'Made for comfort',
+        size: selectedSize.textContent.trim()
+      };
+
+      localStorage.setItem("buyNowProduct", JSON.stringify(item));
+      window.location.href = 'buy.html';
+      return true;
+    }
+  </script>
+
+</body>
+</html>
